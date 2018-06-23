@@ -11,6 +11,9 @@ import (
 type Ds interface {
 	Open(interface{}) error
 	Close() error
+	Create(string, string, int) error
+	Read(string) (string, error)
+	Delete(string) error
 }
 
 const (

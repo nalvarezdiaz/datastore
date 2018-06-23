@@ -35,8 +35,8 @@ func New(prefixes ...interface{}) {
 		p = "  \033[1;32m[" + strings.Join(pp, ",") + "]\033[0;0m "
 	}
 
-	Info = log.New(os.Stdout, p+"INFO: ", log.Ldate|log.Ltime|log.Lshortfile)
-	Warning = log.New(os.Stdout, p+"WARNING: ", log.Ldate|log.Ltime|log.Lshortfile)
-	Error = log.New(os.Stderr, p+"ERROR: ", log.Ldate|log.Ltime|log.Lshortfile)
+	Info = log.New(os.Stdout, p+"INFO:  ", log.Ldate|log.Ltime|log.Lshortfile)
+	Warning = log.New(os.Stdout, p+"\033[1;33mWARN:  ", log.Ldate|log.Ltime|log.Lshortfile)
+	Error = log.New(os.Stderr, p+"\033[1;31mERROR: ", log.Ldate|log.Ltime|log.Lshortfile)
 
 }
