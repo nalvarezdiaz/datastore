@@ -2,29 +2,33 @@ package datastore
 
 import (
 	"errors"
+
+	"github.com/nalvarezdiaz/datastore/logger"
+	"github.com/nalvarezdiaz/datastore/mock"
+	"github.com/nalvarezdiaz/datastore/redis"
 )
 
 type Ds interface {
-	Open(interface{})
-	Close()
+	Open(interface{}) error
+	Close() error
 }
 
 const (
-	mock  = 0
-	redis = 1
+	Mock  = 0
+	Redis = 1
 )
 
 func New(dsType int) (Ds, error) {
 	switch dsType {
-	case mock:
-		initLog("ds-mock")
-		return new(DsMock), nil
-	case redis:
-		initLog("ds-redis")
-		return new(DsRedis), nil
+	case Mock:
+		logger.New("ds-mock")
+		return new(mock.Ds), nil
+	case Redis:
+		logger.New("ds-redis")
+		return new(redis.Ds), nil
 	default:
-		initLog()
-		logs.Error.Println("invalid Ds type")
+		logger.New()
+		logger.Error.Println("invalid Ds type")
 		return nil, errors.New("invalid Ds type")
 	}
 }

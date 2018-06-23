@@ -1,4 +1,4 @@
-package datastore
+package logger
 
 import (
 	"log"
@@ -7,15 +7,11 @@ import (
 	"strings"
 )
 
-type Logger struct {
-	Info    *log.Logger
-	Warning *log.Logger
-	Error   *log.Logger
-}
+var Info *log.Logger
+var Warning *log.Logger
+var Error *log.Logger
 
-var logs *Logger
-
-func initLog(prefixes ...interface{}) {
+func New(prefixes ...interface{}) {
 	var p string
 
 	p = ""
@@ -39,9 +35,8 @@ func initLog(prefixes ...interface{}) {
 		p = "  \033[1;32m[" + strings.Join(pp, ",") + "]\033[0;0m "
 	}
 
-	logs = &Logger{
-		Info:    log.New(os.Stdout, p+"INFO: ", log.Ldate|log.Ltime|log.Lshortfile),
-		Warning: log.New(os.Stdout, p+"WARNING: ", log.Ldate|log.Ltime|log.Lshortfile),
-		Error:   log.New(os.Stderr, p+"ERROR: ", log.Ldate|log.Ltime|log.Lshortfile),
-	}
+	Info = log.New(os.Stdout, p+"INFO: ", log.Ldate|log.Ltime|log.Lshortfile)
+	Warning = log.New(os.Stdout, p+"WARNING: ", log.Ldate|log.Ltime|log.Lshortfile)
+	Error = log.New(os.Stderr, p+"ERROR: ", log.Ldate|log.Ltime|log.Lshortfile)
+
 }
