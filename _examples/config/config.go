@@ -2,7 +2,6 @@ package config
 
 import (
 	"io/ioutil"
-	"os"
 	"path/filepath"
 
 	"github.com/BurntSushi/toml"
@@ -25,26 +24,16 @@ type DatabaseOptions struct {
 	Redis RedisOptions
 }
 
-func readFileIntoByte(filename string) []byte {
-	var fmwConfigJsonBuf []byte
-
+func readFile(filename string) (buff []byte, err error) {
 	f, _ := filepath.Abs(filename)
-	fin, err := os.Open(f)
-
-	if err != nil {
-		panic(err)
-	} else {
-		fmwConfigJsonBuf, err = ioutil.ReadAll(fin)
-		if err != nil {
-			panic(err)
-		}
-	}
-	fin.Close()
-	return fmwConfigJsonBuf
+	return ioutil.ReadFile(f)
 }
 
 func New(filename string) (config *DatabaseOptions, err error) {
-	file := readFileIntoByte(filename)
+	file, err := readFile(filename)
+	if err != nil {
+		return
+	}
 	_, err = toml.Decode(string(file), &config)
 	return
 }
