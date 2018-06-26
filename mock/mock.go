@@ -74,11 +74,15 @@ func (mock *Ds) Create(key string, value interface{}, expiration int) (err error
 		return
 	}
 
+	exp := 0
+	if expiration > 0 {
+		exp = int(time.Now().Unix()) + expiration
+	}
 	item := item{
 		Key: key,
 		Value: record{
 			Data:       value,
-			Expiration: int(time.Now().Unix()) + expiration,
+			Expiration: exp,
 		},
 	}
 
