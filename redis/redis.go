@@ -46,7 +46,7 @@ func (redis *Ds) Close() (err error) {
 	return
 }
 
-func (redis *Ds) Create(key string, value string, expiration int) (err error) {
+func (redis *Ds) Create(key string, value interface{}, expiration int) (err error) {
 	status := redis.Client.Set(key, value, time.Duration(expiration)*time.Second)
 	if status.Err() != nil {
 		logger.Error.Println(status.Err())
@@ -57,7 +57,7 @@ func (redis *Ds) Create(key string, value string, expiration int) (err error) {
 	return
 }
 
-func (redis *Ds) Read(key string) (value string, err error) {
+func (redis *Ds) Read(key string) (value interface{}, err error) {
 	return redis.Client.Get(key).Result()
 }
 

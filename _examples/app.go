@@ -39,7 +39,7 @@ func main() {
 	}
 
 	ds.Create("test1", "this is a test 1", 5)
-	ds.Create("test2", "this is a test 2", 15)
+	ds.Create("test2", struct{A string}{A: "test"}, 15)
 	ds.Create("test3", "this is a test 3", 40)
 
 	time.Sleep(10 * time.Second)

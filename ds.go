@@ -11,8 +11,8 @@ import (
 type Ds interface {
 	Open(interface{}) error
 	Close() error
-	Create(string, string, int) error
-	Read(string) (string, error)
+	Create(string, interface{}, int) error
+	Read(string) (interface{}, error)
 	Delete(string) error
 }
 

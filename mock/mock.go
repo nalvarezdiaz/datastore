@@ -20,7 +20,7 @@ type DsOptions struct {
 }
 
 type record struct {
-	Data       string `json:"data"`
+	Data       interface{} `json:"data"`
 	Expiration int    `json:"expiration"`
 }
 
@@ -66,7 +66,7 @@ func (mock *Ds) Close() (err error) {
 	return
 }
 
-func (mock *Ds) Create(key string, value string, expiration int) (err error) {
+func (mock *Ds) Create(key string, value interface{}, expiration int) (err error) {
 
 	if mock.exist(key) {
 		err = errors.New("unable to create item because the key already exists")
@@ -92,7 +92,7 @@ func (mock *Ds) Create(key string, value string, expiration int) (err error) {
 	return
 }
 
-func (mock *Ds) Read(key string) (value string, err error) {
+func (mock *Ds) Read(key string) (value interface{}, err error) {
 	for _, item := range mock.items {
 		if item.Key == key && (item.Value.Expiration == 0 || item.Value.Expiration >= int(time.Now().Unix())) {
 			return item.Value.Data, nil
@@ -142,19 +142,15 @@ func (mock *Ds) write() (err error) {
 func (mock *Ds) startGarbageCollector() {
 	for {
 		<-time.After(1 * time.Second)
-		go mock.garbageCollector()
-	}
-}
-
-func (mock *Ds) garbageCollector() {
-	var tmp Items
-	for i, item := range mock.items {
-		if item.Value.Expiration == 0 || item.Value.Expiration >= int(time.Now().Unix()) {
-			tmp = append(tmp, mock.items[i])
-		} else {
-			logger.Info.Printf("item with key [%s] has expired\n", item.Key)
+		var tmp Items
+		for i, item := range mock.items {
+			if item.Value.Expiration == 0 || item.Value.Expiration >= int(time.Now().Unix()) {
+				tmp = append(tmp, mock.items[i])
+			} else {
+				logger.Info.Printf("item with key [%s] has expired\n", item.Key)
+			}
 		}
+		mock.items = tmp
+		mock.write()
 	}
-	mock.items = tmp
-	mock.write()
 }
