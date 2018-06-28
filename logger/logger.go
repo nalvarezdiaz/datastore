@@ -18,9 +18,9 @@ func New(prefixes ...interface{}) {
 	if len(prefixes) == 1 {
 		switch prefixes[0].(type) {
 		case string:
-			p = "  \033[1;32m[" + prefixes[0].(string) + "]\033[0;0m "
+			p = " \033[0;32m[" + prefixes[0].(string) + "]\033[0;0m "
 		case int:
-			p = "  \033[1;32m[" + strconv.Itoa(prefixes[0].(int)) + "]\033[0;0m "
+			p = " \033[0;32m[" + strconv.Itoa(prefixes[0].(int)) + "]\033[0;0m "
 		}
 	} else if len(prefixes) > 1 {
 		var pp []string
@@ -32,11 +32,11 @@ func New(prefixes ...interface{}) {
 				pp = append(pp, strconv.Itoa(prefix.(int)))
 			}
 		}
-		p = "  \033[1;32m[" + strings.Join(pp, ",") + "]\033[0;0m "
+		p = " \033[0;32m[" + strings.Join(pp, ",") + "]\033[0;0m "
 	}
 
-	Info = log.New(os.Stdout, p+"INFO:  ", log.Ldate|log.Ltime|log.Lshortfile)
-	Warning = log.New(os.Stdout, p+"\033[1;33mWARN:  ", log.Ldate|log.Ltime|log.Lshortfile)
-	Error = log.New(os.Stderr, p+"\033[1;31mERROR: ", log.Ldate|log.Ltime|log.Lshortfile)
+	Info = log.New(os.Stdout, p+"INFO: ", log.Ldate|log.Ltime|log.Lshortfile)
+	Warning = log.New(os.Stdout, p+"\033[0;33mWARN: ", log.Ldate|log.Ltime|log.Lshortfile)
+	Error = log.New(os.Stderr, p+"\033[0;31mERROR: ", log.Ldate|log.Ltime|log.Lshortfile)
 
 }
